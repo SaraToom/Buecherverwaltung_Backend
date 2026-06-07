@@ -29,11 +29,11 @@ public class Buch {
     public String getTitle() { return title; }
     public String getAuthor() { return author; }
     public String getGenre() { return genre; }
-    public boolean isRead() { return isRead; }
+    public boolean getIsRead() { return isRead; }
 
     // Setter
     public void setTitle(String title) { this.title = title; }
     public void setAuthor(String author) { this.author = author; }
     public void setGenre(String genre) { this.genre = genre; }
-    public void setRead(boolean read) { isRead = read; }
+    public void setIsRead(boolean isRead) { this.isRead = isRead; }
 }
