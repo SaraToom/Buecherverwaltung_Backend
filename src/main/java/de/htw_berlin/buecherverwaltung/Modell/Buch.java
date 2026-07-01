@@ -1,6 +1,7 @@
 package de.htw_berlin.buecherverwaltung.Modell; 
 
 import jakarta.persistence.*;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
 @Table(name = "books") 
@@ -16,6 +17,8 @@ public class Buch {
     private Integer releaseYear;       // NEU
     private Integer stars;            
     private String review;         
+    
+    @JsonProperty("isFavorite")
     private Boolean isFavorite;    
     private String status;         
     
@@ -47,8 +50,8 @@ public class Buch {
     public String getReview() { return review; }
     public void setReview(String review) { this.review = review; }
 
-    public Boolean isFavorite() { return isFavorite; }
-    public void setFavorite(Boolean isFavorite) { this.isFavorite = isFavorite; }
+    public Boolean getIsFavorite() { return isFavorite; }
+    public void setIsFavorite(Boolean isFavorite) { this.isFavorite = isFavorite; }
 
     public String getStatus() { return status; }
     public void setStatus(String status) { this.status = status; }
