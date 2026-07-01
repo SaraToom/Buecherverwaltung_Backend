@@ -18,7 +18,7 @@ public class DataInitializer implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         if (listRepository.count() == 0) {
-            List<String> defaultLists = Arrays.asList("Möchte ich lesen", "Gelesen", "Aktuell");
+            List<String> defaultLists = Arrays.asList("Möchte ich lesen", "Aktuell", "Gelesen", "Abgebrochen");
             for (String name : defaultLists) {
                 listRepository.save(new BookList(name));
             }
