@@ -19,6 +19,9 @@ public class Buch {
     private Boolean isFavorite;    
     private String status;         
     
+    @ManyToOne
+    @JoinColumn(name = "list_id")
+    private BookList bookList;
 
    
     public Buch() {} 
@@ -49,4 +52,7 @@ public class Buch {
 
     public String getStatus() { return status; }
     public void setStatus(String status) { this.status = status; }
+
+    public BookList getBookList() { return bookList; }
+    public void setBookList(BookList bookList) { this.bookList = bookList; }
 }
