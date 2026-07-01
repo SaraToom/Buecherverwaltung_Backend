@@ -13,10 +13,10 @@ public class Buch {
     private String title;
     private String author;
     private String genre;
-    private int releaseYear;       // NEU
-    private int stars;            
+    private Integer releaseYear;       // NEU
+    private Integer stars;            
     private String review;         
-    private boolean isFavorite;    
+    private Boolean isFavorite;    
     private String status;         
     
 
@@ -35,17 +35,17 @@ public class Buch {
     public String getGenre() { return genre; }
     public void setGenre(String genre) { this.genre = genre; }
 
-    public int getReleaseYear() { return releaseYear; }
-    public void setReleaseYear(int releaseYear) { this.releaseYear = releaseYear; }
+    public Integer getReleaseYear() { return releaseYear; }
+    public void setReleaseYear(Integer releaseYear) { this.releaseYear = releaseYear; }
 
-    public int getStars() { return stars; }
-    public void setStars(int stars) { this.stars = stars; }
+    public Integer getStars() { return stars; }
+    public void setStars(Integer stars) { this.stars = stars; }
 
     public String getReview() { return review; }
     public void setReview(String review) { this.review = review; }
 
-    public boolean isFavorite() { return isFavorite; }
-    public void setFavorite(boolean isFavorite) { this.isFavorite = isFavorite; }
+    public Boolean isFavorite() { return isFavorite; }
+    public void setFavorite(Boolean isFavorite) { this.isFavorite = isFavorite; }
 
     public String getStatus() { return status; }
     public void setStatus(String status) { this.status = status; }
