@@ -1,0 +1,18 @@
+# Gradle build and cache directories
+.gradle/
+build/
+
+# IDE files and directories
+.vscode/
+.idea/
+*.iml
+*.ipr
+*.iws
+out/
+
+# Compiled Java class files
+bin/
+*.class
+
+# macOS system files
+.DS_Store
