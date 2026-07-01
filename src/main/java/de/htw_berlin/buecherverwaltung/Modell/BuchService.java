@@ -22,4 +22,7 @@ public class BuchService {
     public Buch saveBook(Buch buch) {
         return repository.save(buch);
     }
-}
+    
+    public void deleteBookById(Long id) { repository.deleteById(id); }
+    }
+

@@ -13,27 +13,39 @@ public class Buch {
     private String title;
     private String author;
     private String genre;
-    private boolean isRead;
+    private int releaseYear;       // NEU
+    private int stars;            
+    private String review;         
+    private boolean isFavorite;    
+    private String status;         
+    
 
+   
     public Buch() {} 
 
-    public Buch(String title, String author, String genre, boolean isRead) {
-        this.title = title;
-        this.author = author;
-        this.genre = genre;
-        this.isRead = isRead;
-    }
-
-    // Getter
+    // Getter & Setter für alle Felder
     public Long getId() { return id; }
     public String getTitle() { return title; }
-    public String getAuthor() { return author; }
-    public String getGenre() { return genre; }
-    public boolean getIsRead() { return isRead; }
-
-    // Setter
     public void setTitle(String title) { this.title = title; }
+
+    public String getAuthor() { return author; }
     public void setAuthor(String author) { this.author = author; }
+
+    public String getGenre() { return genre; }
     public void setGenre(String genre) { this.genre = genre; }
-    public void setIsRead(boolean isRead) { this.isRead = isRead; }
+
+    public int getReleaseYear() { return releaseYear; }
+    public void setReleaseYear(int releaseYear) { this.releaseYear = releaseYear; }
+
+    public int getStars() { return stars; }
+    public void setStars(int stars) { this.stars = stars; }
+
+    public String getReview() { return review; }
+    public void setReview(String review) { this.review = review; }
+
+    public boolean getIsFavorite() { return isFavorite; }
+    public void setIsFavorite(boolean isFavorite) { this.isFavorite = isFavorite; }
+
+    public String getStatus() { return status; }
+    public void setStatus(String status) { this.status = status; }
 }
