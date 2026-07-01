@@ -44,8 +44,8 @@ public class Buch {
     public String getReview() { return review; }
     public void setReview(String review) { this.review = review; }
 
-    public boolean getIsFavorite() { return isFavorite; }
-    public void setIsFavorite(boolean isFavorite) { this.isFavorite = isFavorite; }
+    public boolean isFavorite() { return isFavorite; }
+    public void setFavorite(boolean isFavorite) { this.isFavorite = isFavorite; }
 
     public String getStatus() { return status; }
     public void setStatus(String status) { this.status = status; }
