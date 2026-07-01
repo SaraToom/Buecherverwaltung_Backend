@@ -34,6 +34,7 @@ public class BuchController {
     @PutMapping("/{id}")
     public Buch updateBook(@PathVariable Long id, @RequestBody Buch updatedBuch) {
         // Hier rufen wir deinen Service auf, um das bestehende Buch zu überschreiben
+        updatedBuch.setId(id); // Stelle sicher, dass die ID gesetzt ist
         return service.saveBook(updatedBuch); 
     }
 }
