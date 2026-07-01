@@ -1,6 +1,7 @@
 package de.htw_berlin.buecherverwaltung.Modell; 
 
 import jakarta.persistence.*;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
@@ -20,7 +21,12 @@ public class Buch {
     
     @JsonProperty("isFavorite")
     private Boolean isFavorite;    
-    private String status;         
+    private String status;
+
+    // Legacy-Spalte aus alter DB-Version – wird nicht mehr im Frontend genutzt
+    @JsonIgnore
+    @Column(name = "is_read", nullable = false)
+    private boolean isRead = false;         
     
     @ManyToOne
     @JoinColumn(name = "list_id")
