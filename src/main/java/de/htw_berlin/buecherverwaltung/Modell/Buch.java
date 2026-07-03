@@ -16,7 +16,7 @@ public class Buch {
     private String author;
     private String genre;
     private Integer releaseYear;       // NEU
-    private Integer stars;            
+    private Double stars;
     private String review;         
     
     @JsonProperty("isFavorite")
@@ -54,8 +54,8 @@ public class Buch {
     public Integer getReleaseYear() { return releaseYear; }
     public void setReleaseYear(Integer releaseYear) { this.releaseYear = releaseYear; }
 
-    public Integer getStars() { return stars; }
-    public void setStars(Integer stars) { this.stars = stars; }
+    public Double getStars() { return stars; }
+    public void setStars(Double stars) { this.stars = stars; }
 
     public String getReview() { return review; }
     public void setReview(String review) { this.review = review; }
