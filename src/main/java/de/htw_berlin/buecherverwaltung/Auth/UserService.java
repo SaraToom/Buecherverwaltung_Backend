@@ -46,7 +46,7 @@ public class UserService implements UserDetailsService {
         }
         User user = new User();
         user.setUsername(username);
-        user.setEmail(email);
+        user.setEmail((email == null || email.isBlank()) ? null : email);
         user.setPassword(passwordEncoder.encode(password));
         User savedUser = userRepository.save(user);
         createDefaultLists(savedUser);

@@ -2,6 +2,7 @@ package de.htw_berlin.buecherverwaltung.Auth;
 
 import de.htw_berlin.buecherverwaltung.Security.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -30,6 +31,8 @@ public class AuthController {
             return ResponseEntity.ok(Map.of("message", "Registrierung erfolgreich."));
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
+        } catch (DataIntegrityViolationException e) {
+            return ResponseEntity.badRequest().body(Map.of("error", "Benutzername oder E-Mail ist bereits vergeben."));
         }
     }
 
