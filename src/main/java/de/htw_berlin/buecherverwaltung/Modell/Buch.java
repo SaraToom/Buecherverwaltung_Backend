@@ -32,8 +32,12 @@ public class Buch {
     @JoinColumn(name = "list_id")
     private BookList bookList;
 
-   
-    public Buch() {} 
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    @JsonIgnore
+    private User user;
+
+    public Buch() {}
 
     // Getter & Setter für alle Felder
     public Long getId() { return id; }
@@ -64,4 +68,7 @@ public class Buch {
 
     public BookList getBookList() { return bookList; }
     public void setBookList(BookList bookList) { this.bookList = bookList; }
+
+    public User getUser() { return user; }
+    public void setUser(User user) { this.user = user; }
 }

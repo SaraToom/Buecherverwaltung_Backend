@@ -41,19 +41,23 @@ class BuchServiceTest {
     }
 
     @Test
-    void getAllBooks_gibtAlleBuecherAusDemRepositoryZurueck() {
-        when(repository.findAll()).thenReturn(Arrays.asList(buch1, buch2));
+    void getAllBooksForUser_gibtAlleBuecherDesNutzersZurueck() {
+        User user = new User();
+        user.setId(1L);
+        when(repository.findByUser(user)).thenReturn(Arrays.asList(buch1, buch2));
 
-        List<Buch> result = service.getAllBooks();
+        List<Buch> result = service.getAllBooksForUser(user);
 
         assertThat(result).containsExactly(buch1, buch2);
     }
 
     @Test
-    void getAllBooks_gibtLeereListeZurueckWennKeineBuecherVorhanden() {
-        when(repository.findAll()).thenReturn(List.of());
+    void getAllBooksForUser_gibtLeereListeZurueckWennKeineBuecherVorhanden() {
+        User user = new User();
+        user.setId(1L);
+        when(repository.findByUser(user)).thenReturn(List.of());
 
-        List<Buch> result = service.getAllBooks();
+        List<Buch> result = service.getAllBooksForUser(user);
 
         assertThat(result).isEmpty();
     }

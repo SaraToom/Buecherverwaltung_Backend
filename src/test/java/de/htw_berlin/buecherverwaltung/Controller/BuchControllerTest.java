@@ -1,13 +1,18 @@
 package de.htw_berlin.buecherverwaltung.Controller;
 
+import de.htw_berlin.buecherverwaltung.Auth.UserService;
 import de.htw_berlin.buecherverwaltung.Modell.BookList;
 import de.htw_berlin.buecherverwaltung.Modell.BookListRepository;
 import de.htw_berlin.buecherverwaltung.Modell.Buch;
 import de.htw_berlin.buecherverwaltung.Modell.BuchService;
+import de.htw_berlin.buecherverwaltung.Modell.User;
+import de.htw_berlin.buecherverwaltung.Security.JwtUtil;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import tools.jackson.databind.ObjectMapper;
@@ -16,10 +21,10 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -29,6 +34,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(BuchController.class)
+@WithMockUser(username = "testuser")
 class BuchControllerTest {
 
     @Autowired
@@ -43,6 +49,22 @@ class BuchControllerTest {
     @MockitoBean
     private BookListRepository bookListRepository;
 
+    @MockitoBean
+    private UserService userService;
+
+    @MockitoBean
+    private JwtUtil jwtUtil;
+
+    private User testUser;
+
+    @BeforeEach
+    void setUp() {
+        testUser = new User();
+        testUser.setId(1L);
+        testUser.setUsername("testuser");
+        when(userService.findByUsername("testuser")).thenReturn(testUser);
+    }
+
     @Test
     void getBooks_gibtAlleBuecherAlsJsonZurueck() throws Exception {
         Buch buch = new Buch();
@@ -50,7 +72,7 @@ class BuchControllerTest {
         buch.setTitle("Der Prozess");
         buch.setAuthor("Franz Kafka");
 
-        when(service.getAllBooks()).thenReturn(List.of(buch));
+        when(service.getAllBooksForUser(testUser)).thenReturn(List.of(buch));
 
         mockMvc.perform(get("/books"))
                 .andExpect(status().isOk())
@@ -73,7 +95,7 @@ class BuchControllerTest {
 
         when(service.saveBook(any(Buch.class))).thenReturn(gespeichertesBuch);
 
-        mockMvc.perform(post("/books")
+        mockMvc.perform(post("/books").with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(neuesBuch)))
                 .andExpect(status().isOk())
@@ -96,7 +118,7 @@ class BuchControllerTest {
         when(bookListRepository.findById(5L)).thenReturn(Optional.of(list));
         when(service.saveBook(any(Buch.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
-        mockMvc.perform(post("/books")
+        mockMvc.perform(post("/books").with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(neuesBuch)))
                 .andExpect(status().isOk())
@@ -118,7 +140,7 @@ class BuchControllerTest {
         when(bookListRepository.findById(99L)).thenReturn(Optional.empty());
         when(service.saveBook(any(Buch.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
-        mockMvc.perform(post("/books")
+        mockMvc.perform(post("/books").with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(neuesBuch)))
                 .andExpect(status().isOk())
@@ -127,7 +149,7 @@ class BuchControllerTest {
 
     @Test
     void deleteBook_ruftServiceMitKorrekterIdAuf() throws Exception {
-        mockMvc.perform(delete("/books/{id}", 1L))
+        mockMvc.perform(delete("/books/{id}", 1L).with(csrf()))
                 .andExpect(status().isOk());
 
         verify(service, times(1)).deleteBookById(1L);
@@ -142,7 +164,7 @@ class BuchControllerTest {
 
         when(service.saveBook(any(Buch.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
-        mockMvc.perform(put("/books/{id}", 1L)
+        mockMvc.perform(put("/books/{id}", 1L).with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(updatedBuch)))
                 .andExpect(status().isOk())

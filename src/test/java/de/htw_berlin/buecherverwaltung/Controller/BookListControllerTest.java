@@ -1,13 +1,18 @@
 package de.htw_berlin.buecherverwaltung.Controller;
 
+import de.htw_berlin.buecherverwaltung.Auth.UserService;
 import de.htw_berlin.buecherverwaltung.Modell.BookList;
 import de.htw_berlin.buecherverwaltung.Modell.BookListRepository;
 import de.htw_berlin.buecherverwaltung.Modell.Buch;
 import de.htw_berlin.buecherverwaltung.Modell.BuchRepository;
+import de.htw_berlin.buecherverwaltung.Modell.User;
+import de.htw_berlin.buecherverwaltung.Security.JwtUtil;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import tools.jackson.databind.ObjectMapper;
@@ -18,6 +23,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -25,6 +31,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(BookListController.class)
+@WithMockUser(username = "testuser")
 class BookListControllerTest {
 
     @Autowired
@@ -39,12 +46,28 @@ class BookListControllerTest {
     @MockitoBean
     private BuchRepository bookRepository;
 
+    @MockitoBean
+    private UserService userService;
+
+    @MockitoBean
+    private JwtUtil jwtUtil;
+
+    private User testUser;
+
+    @BeforeEach
+    void setUp() {
+        testUser = new User();
+        testUser.setId(1L);
+        testUser.setUsername("testuser");
+        when(userService.findByUsername("testuser")).thenReturn(testUser);
+    }
+
     @Test
     void getAllLists_gibtAlleListenZurueck() throws Exception {
         BookList list = new BookList("Aktuell");
         list.setId(1L);
 
-        when(listRepository.findAll()).thenReturn(List.of(list));
+        when(listRepository.findByUser(testUser)).thenReturn(List.of(list));
 
         mockMvc.perform(get("/lists"))
                 .andExpect(status().isOk())
@@ -60,7 +83,7 @@ class BookListControllerTest {
 
         when(listRepository.save(any(BookList.class))).thenReturn(gespeicherteListe);
 
-        mockMvc.perform(post("/lists")
+        mockMvc.perform(post("/lists").with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(neueListe)))
                 .andExpect(status().isOk())
@@ -78,7 +101,7 @@ class BookListControllerTest {
 
         when(bookRepository.findByBookListId(1L)).thenReturn(List.of(buch));
 
-        mockMvc.perform(delete("/lists/{id}", 1L))
+        mockMvc.perform(delete("/lists/{id}", 1L).with(csrf()))
                 .andExpect(status().isOk());
 
         verify(bookRepository, times(1)).save(argThatBookListIsNull());
